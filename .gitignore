@@ -2,3 +2,12 @@
 target/
 dbt_packages/
 logs/
+
+# Credentials -never commit these
+.env
+profiles.yml
+
+
+# OS Files
+.DS_Store
+Thumbs.db
