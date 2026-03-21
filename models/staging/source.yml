@@ -1,0 +1,18 @@
+version: 2
+
+sources:
+  - name: olist
+    database: DIGITAL_AUTOMATION_DB
+    schema: RAW
+    tables: 
+      - name: ORDER_ITEMS
+      - name: ORDER_PAYMENTS
+      - name: ORDER_REVIEWS
+      - name: PRODUCTS
+      - name: PRODUCT_CATEGORY_TRANSLATION
+      - name: QUALIFIED_LEADS
+      - name: SELLERS
+      - name: CLOSED_DEALS
+      - name: CUSTOMERS
+      - name: GEOLOCATION
+      - name: ORDERS
