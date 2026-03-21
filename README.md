@@ -1,15 +1,26 @@
-Welcome to your new dbt project!
+<# Digital Automation — Olist Ecommerce Analytics
 
-### Using the starter project
+## Project Overview
+End to end analytics engineering pipeline built for Olist, a Brazilian ecommerce marketplace client of Digital Automation.
 
-Try running the following commands:
-- dbt run
-- dbt test
+## Tech Stack
+- **Snowflake** — Cloud data warehouse
+- **dbt** — Data transformation and modeling
+- **Power BI** — Business intelligence dashboards
+- **GitHub Actions** — CI/CD automated testing
 
+## Data Sources
+- Olist Ecommerce Dataset — 100,000 orders, 9 tables
+- Olist Marketing Funnel Dataset — Lead acquisition data, 2 tables
 
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+## Pipeline Architecture
+Raw Data → dbt Staging → dbt Dimensions → dbt Facts → dbt Marts → Power BI
+
+## Project Structure
+- `models/staging` — Cleans and renames raw source tables
+- `models/dimensions` — Kimball dimension tables with surrogate keys
+- `models/facts` — Kimball fact tables with grain defined
+- `models/marts` — Business ready aggregations for Power BI
+
+## Analytics Engineer
+Seyi Falope — Digital Automation
