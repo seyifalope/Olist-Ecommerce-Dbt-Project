@@ -1,0 +1,89 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: "Core fact table. One row per order. Combines orders, payments and items into a single comprehensive view of every transaction."
+    columns:
+      - name: order_id
+        description: "Primary key. Unique identifier for each order."
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Foreign key to customers. Links each order to the customer who placed it."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist__customers')
+                field: customer_id
+      - name: order_status
+        description: "Current status of the order. E.g delivered, shipped, canceled."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['delivered', 'shipped', 'canceled', 'unavailable', 'invoiced', 'processing', 'created', 'approved']
+      - name: order_purchase_timestamp
+        description: "Timestamp when the customer placed the order."
+      - name: order_approved_at
+        description: "Timestamp when the order payment was approved."
+      - name: order_delivered_carrier_date
+        description: "Timestamp when the order was handed to the carrier."
+      - name: order_delivered_customer_date
+        description: "Timestamp when the order was delivered to the customer."
+      - name: order_estimated_delivery_date
+        description: "Estimated delivery date shown to the customer at purchase time."
+      - name: total_payment_value
+        description: "Total amount paid for the order across all payment methods."
+      - name: total_payment_methods
+        description: "Number of payment methods used on the order."
+      - name: max_payment_installments
+        description: "Highest number of installments chosen across all payment methods."
+      - name: total_items
+        description: "Total number of items in the order."
+      - name: total_price
+        description: "Sum of all item prices in the order in Brazilian Real."
+      - name: total_freight_value
+        description: "Sum of all freight costs in the order in Brazilian Real."
+
+  - name: fct_marketing
+    description: "Marketing fact table. One row per marketing qualified lead. Shows the full funnel from first contact to conversion into a seller."
+    columns:
+      - name: mql_id
+        description: "Primary key. Unique identifier for each marketing qualified lead."
+        tests:
+          - unique
+          - not_null
+      - name: first_contact_date
+        description: "Date the lead first made contact."
+        tests:
+          - not_null
+      - name: landing_page_id
+        description: "Identifier of the landing page the lead came from."
+      - name: origin
+        description: "Marketing channel the lead originated from."
+      - name: seller_id
+        description: "Foreign key to sellers. Populated only if the lead converted into a seller."
+      - name: won_date
+        description: "Date the deal was closed. Null if the lead did not convert."
+      - name: business_segment
+        description: "Business segment the seller operates in."
+      - name: lead_type
+        description: "Type of lead. E.g online_medium, industry."
+      - name: lead_behaviour_profile
+        description: "Behavioural profile of the lead during the sales process."
+      - name: has_company
+        description: "Whether the lead has a registered company."
+      - name: has_gtin
+        description: "Whether the lead has products with a GTIN barcode."
+      - name: average_stock
+        description: "Average stock level declared by the lead."
+      - name: business_type
+        description: "Type of business. E.g reseller, manufacturer."
+      - name: declared_product_catalog_size
+        description: "Number of products the lead declared they would list."
+      - name: declared_monthly_revenue
+        description: "Monthly revenue declared by the lead during onboarding."
+      - name: is_converted
+        description: "True if the lead converted into a seller. False if they did not."
