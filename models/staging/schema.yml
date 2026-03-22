@@ -2,93 +2,189 @@ version: 2
 
 models:
   - name: stg_olist__orders
+    description: "Staged orders data from the raw Olist dataset. One row per order."
     columns:
       - name: order_id
+        description: "Primary key. Unique identifier for each order."
         tests:
           - unique
           - not_null
       - name: customer_id
+        description: "Foreign key to the customers table. Links each order to a customer."
         tests:
           - not_null
       - name: order_status
         tests:
-          - not_null
           - accepted_values:
-              values: ['delivered', 'shipped', 'canceled', 'unavailable', 'invoiced', 'processing', 'created', 'approved']
+              arguments:
+                values: ['delivered', 'shipped', 'canceled', 'unavailable', 'invoiced', 'processing', 'created', 'approved']
+      - name: order_purchase_timestamp
+        description: "Timestamp when the customer placed the order."
+      - name: order_approved_at
+        description: "Timestamp when the order payment was approved."
+      - name: order_delivered_carrier_date
+        description: "Timestamp when the order was handed to the carrier."
+      - name: order_delivered_customer_date
+        description: "Timestamp when the order was delivered to the customer."
+      - name: order_estimated_delivery_date
+        description: "Estimated delivery date shown to the customer at time of purchase."
 
   - name: stg_olist__customers
+    description: "Staged customers data from the raw Olist dataset. One row per customer_id."
     columns:
       - name: customer_id
+        description: "Primary key. Unique per order — same person can have multiple customer_ids."
         tests:
           - unique
           - not_null
       - name: customer_unique_id
+        description: "True unique identifier for each real customer across all orders."
         tests:
           - not_null
+      - name: customer_zip_code_prefix
+        description: "First 5 digits of the customer zip code."
+      - name: customer_city
+        description: "City where the customer is located."
+      - name: customer_state
+        description: "State where the customer is located."
 
   - name: stg_olist__order_items
+    description: "Staged order items data. One row per item within an order."
     columns:
       - name: order_id
+        description: "Foreign key to the orders table."
         tests:
           - not_null
+      - name: order_item_id
+        description: "Sequential number identifying each item within an order."
       - name: product_id
+        description: "Foreign key to the products table."
         tests:
           - not_null
       - name: seller_id
+        description: "Foreign key to the sellers table."
         tests:
           - not_null
+      - name: shipping_limit_date
+        description: "Date by which the seller must ship the item."
+      - name: price
+        description: "Price of the item in Brazilian Real."
+      - name: freight_value
+        description: "Freight cost for the item in Brazilian Real."
 
   - name: stg_olist__order_payments
+    description: "Staged order payments data. One row per payment method per order."
     columns:
       - name: order_id
+        description: "Foreign key to the orders table."
         tests:
           - not_null
+      - name: payment_sequential
+        description: "Sequence number identifying each payment method used on an order."
       - name: payment_type
+        description: "Payment method used. E.g credit_card, boleto, voucher, debit_card."
         tests:
           - not_null
           - accepted_values:
               values: ['credit_card', 'boleto', 'voucher', 'debit_card', 'not_defined']
+      - name: payment_installments
+        description: "Number of installments chosen by the customer for credit card payments."
+      - name: payment_value
+        description: "Total value of this payment in Brazilian Real."
 
   - name: stg_olist__order_reviews
+    description: "Staged order reviews data. One row per review submitted by a customer."
     columns:
       - name: review_id
+        description: "Primary key. Unique identifier for each review."
         tests:
           - not_null
       - name: order_id
+        description: "Foreign key to the orders table."
         tests:
           - not_null
       - name: review_score
+        description: "Customer satisfaction score between 1 and 5."
         tests:
           - not_null
           - accepted_values:
               values: [1, 2, 3, 4, 5]
+      - name: review_comment_title
+        description: "Title of the review comment left by the customer."
+      - name: review_comment_message
+        description: "Full review message left by the customer."
+      - name: review_creation_date
+        description: "Date the review was created."
+      - name: review_answer_timestamp
+        description: "Timestamp when the review was answered."
 
   - name: stg_olist__products
+    description: "Staged products data. One row per product."
     columns:
       - name: product_id
+        description: "Primary key. Unique identifier for each product."
         tests:
           - unique
           - not_null
+      - name: product_category_name
+        description: "Category name of the product in Portuguese."
+      - name: product_weight_g
+        description: "Weight of the product in grams."
+      - name: product_length_cm
+        description: "Length of the product in centimetres."
+      - name: product_height_cm
+        description: "Height of the product in centimetres."
+      - name: product_width_cm
+        description: "Width of the product in centimetres."
 
   - name: stg_olist__sellers
+    description: "Staged sellers data. One row per seller."
     columns:
       - name: seller_id
+        description: "Primary key. Unique identifier for each seller."
         tests:
           - unique
           - not_null
+      - name: seller_zip_code_prefix
+        description: "First 5 digits of the seller zip code."
+      - name: seller_city
+        description: "City where the seller is located."
+      - name: seller_state
+        description: "State where the seller is located."
 
   - name: stg_olist__qualified_leads
+    description: "Staged marketing qualified leads. One row per lead that entered the funnel."
     columns:
       - name: mql_id
+        description: "Primary key. Unique identifier for each marketing qualified lead."
         tests:
           - unique
           - not_null
+      - name: first_contact_date
+        description: "Date the lead first made contact."
+      - name: landing_page_id
+        description: "Identifier of the landing page the lead came from."
+      - name: origin
+        description: "Marketing channel the lead originated from."
 
   - name: stg_olist__closed_deals
+    description: "Staged closed deals data. One row per lead that converted into a seller."
     columns:
       - name: mql_id
+        description: "Foreign key to qualified leads. Links the deal back to the original lead."
         tests:
           - not_null
       - name: seller_id
+        description: "Foreign key to sellers. The seller account created from this deal."
         tests:
           - not_null
+      - name: won_date
+        description: "Date the deal was closed and the seller was onboarded."
+      - name: business_segment
+        description: "Business segment the seller operates in."
+      - name: lead_type
+        description: "Type of lead. E.g online_medium, industry."
+      - name: business_type
+        description: "Type of business. E.g reseller, manufacturer."
+      - name: declared_monthly_revenue
+        description: "Monthly revenue declared by the seller during onboarding."

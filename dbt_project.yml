@@ -41,6 +41,4 @@ models:
     facts:
       +materialized: view
       +schema: DEV  
-    marts:
-      +materialized: view
-      +schema: PROD  
+   
