@@ -99,3 +99,36 @@ models:
         description: "Average latitude coordinate for this zip code area."
       - name: avg_lng
         description: "Average longitude coordinate for this zip code area."
+
+  - name: dim_date
+    description: "Date dimension table. One row per day from 2016-01-01 to 2018-12-31. Used for time intelligence in Power BI."
+    columns:
+      - name: date_id
+        description: "Primary key. Unique date value for each day."
+        tests:
+          - unique
+          - not_null
+      - name: full_date
+        description: "Full date value."
+      - name: year
+        description: "Year number. E.g 2016, 2017, 2018."
+      - name: quarter
+        description: "Quarter number. 1 to 4."
+      - name: month_number
+        description: "Month as a number. 1 to 12."
+      - name: month_name
+        description: "Month as a word. E.g January, February."
+      - name: day_of_month
+        description: "Day number within the month. 1 to 31."
+      - name: day_of_week
+        description: "Day number within the week. 1 to 7."
+      - name: day_name
+        description: "Day as a word. E.g Monday, Tuesday."
+      - name: week_of_year
+        description: "Week number within the year. 1 to 52."
+      - name: is_weekday
+        description: "True if the day is a weekday. False if weekend."
+      - name: year_quarter
+        description: "Year and quarter combined. E.g 2017-Q3."
+      - name: month_start_date
+        description: "First day of the month for this date."
