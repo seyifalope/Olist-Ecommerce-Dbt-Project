@@ -1,5 +1,5 @@
 # Olist Ecommerce Analytics Platform
-### Built by Seyi Falope — Analytics Engineer, Digital Automation
+### Built by Seyi Falope — Analytics Engineer
 
 ![dbt](https://img.shields.io/badge/dbt-1.11.7-orange)
 ![Snowflake](https://img.shields.io/badge/Snowflake-DIGITAL__AUTOMATION__DB-blue)
